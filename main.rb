@@ -33,13 +33,14 @@ ranking_fly = ["以下フライング\n"]
 
 hanazono.reverse!.each do |tweet|
   time = tweet_time(tweet.id).to_s
+  via = "via: #{tweet.source.to_s.match(/>(.+)</)[1]}"
   flying = time[0..15] == (Date.today - 1).strftime("%Y-%m-%d 23:59")
   if flying #フライング
-    ranking_fly.push("#{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n\n")
+    ranking_fly.push("#{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n#{via}\n\n")
   else
     i += 1
-    hantei = "#{i}位"
-    ranking.push("#{hantei} #{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n\n")    
+    hantei = "#{i}位:"
+    ranking.push("#{hantei} #{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n#{via}\n\n")    
   end
 end
 
