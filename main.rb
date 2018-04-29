@@ -28,19 +28,22 @@ end
 
 i = 0
 
-text = []
+ranking = []
+ranking_fly = ["以下フライング\n"]
 
 hanazono.reverse!.each do |tweet|
   time = tweet_time(tweet.id).to_s
   flying = time[0..15] == (Date.today - 1).strftime("%Y-%m-%d 23:59")
-  if flying
-    hantei = "フライング"
+  if flying #フライング
+    ranking_fly.push("#{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n\n")
   else
     i += 1
     hantei = "#{i}位"
+    ranking.push("#{hantei} #{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n\n")    
   end
-  text.push("#{hantei} #{tweet.user.name}(@#{tweet.user.screen_name})\n#{time}\n\n")
 end
 
-client.create_direct_message('RonRonMonday', text.join)
+ranking_fly[0] = "フライングなし" if ranking_fly[1] == nil
+
+client.create_direct_message('RonRonMonday', ranking.join + ranking_fly.join)
 
